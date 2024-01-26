@@ -88,11 +88,17 @@ def removeWalls(a, b):
         a.walls[2] = False
         b.walls[0] = False
 
-def save_maze(grid, filename="maze.txt"):
+def save_maze(grid, cols, rows, filename="maze.txt"):
     with open(filename, "w") as file:
-        for cell in grid:
-            cell_data = "".join(["1" if wall else "0" for wall in cell.walls])
-            file.write(f"{cell_data}\n")
+        cell_count = 0
+        for j in range(rows):
+            row_data = ""
+            for i in range(cols):
+                cell = grid[cell_count]
+                cell_data = "".join(["1" if wall else "0" for wall in cell.walls])
+                row_data += cell_data
+                cell_count += 1
+            file.write(f"{row_data}\n")
 
 for j in range(rows):
     for i in range(cols):
@@ -105,7 +111,6 @@ n = 0
 current = grid[n]
 
 # GUI
-panel_height = 40
 panel_y = window_height - panel_height
 button_width = 80
 button_height = 30
@@ -141,7 +146,7 @@ while running:
             elif stop_button.collidepoint((mouse_x, mouse_y)):
                 start_generation = False
             elif save_txt_button.collidepoint((mouse_x, mouse_y)):
-                save_maze(grid)
+                save_maze(grid, cols, rows)
                 print("Saved as text")
             elif save_png_button.collidepoint((mouse_x, mouse_y)):
                 pygame.image.save(win, "maze_snapshot.png")
